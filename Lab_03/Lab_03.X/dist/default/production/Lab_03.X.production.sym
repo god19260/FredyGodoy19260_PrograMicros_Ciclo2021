@@ -1,0 +1,32 @@
+__S0 0 0 ABS 0
+__S1 0 0 ABS 0
+__Hconfig 2009 0 CONFIG 4
+__Lconfig 0 0 CONFIG 4
+__Hcode 244 0 ABS 0
+__Lcode 244 0 ABS 0
+__Hdata 244 0 ABS 0
+__Ldata 244 0 ABS 0
+__Hudata_bank0 244 0 ABS 0
+__Ludata_bank0 244 0 ABS 0
+__Hudata_shr 244 0 ABS 0
+__Ludata_shr 244 0 ABS 0
+__Hedata 122 0 EEDATA 3
+__Ledata 0 0 EEDATA 3
+__Hudata 244 0 ABS 0
+__Ludata 244 0 ABS 0
+__Hudata_bank1 244 0 ABS 0
+__Ludata_bank1 244 0 ABS 0
+__Hspace_0 244 0 ABS 0
+__Lspace_0 0 0 ABS 0
+__Hspace_1 0 0 ABS 0
+__Lspace_1 0 0 ABS 0
+__Hspace_3 122 0 ABS 0
+__Lspace_3 0 0 ABS 0
+__Hspace_4 4010 0 ABS 0
+__Lspace_4 0 0 ABS 0
+__Hudata_bank2 244 0 ABS 0
+__Ludata_bank2 244 0 ABS 0
+__Hudata_bank3 244 0 ABS 0
+__Ludata_bank3 244 0 ABS 0
+%segments
+%locals
