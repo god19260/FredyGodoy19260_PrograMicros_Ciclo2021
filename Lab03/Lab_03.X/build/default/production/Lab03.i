@@ -2481,8 +2481,8 @@ ORG 00h
 resVect:
     PAGESEL main
     goto main
-PSECT code, delta=2, abs
 
+PSECT code, delta=2, abs
 ORG 100h
 tabla:
     clrf PCLATH
@@ -2563,7 +2563,12 @@ loop:
     call Temporizador_65ms
     call Temporizador_65ms
     call Temporizador_65ms
+    bcf PORTE,0
     incf PORTC,1
+    movf Cont, 0
+    subwf PORTC,0
+    btfsc STATUS, 2
+    call Iguales
 
     GOTO loop
 
@@ -2596,6 +2601,11 @@ Decremento:
     call tabla
     movwf PORTD
     RETURN
+
+Iguales:
+    bsf PORTE,0
+    clrf PORTC
+    return
 
     ; 00111111B ; Cero
     ; 00000110B ;Uno
