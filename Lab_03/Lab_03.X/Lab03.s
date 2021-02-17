@@ -26,7 +26,8 @@ processor 16F887
 ; Variables a usar
 PSECT udata_bank0
 Cont:  DS 1
-    
+
+; esta es la clave de las tablas!!!!!!!!!!!!     
 PSECT resVect, class=code, abs, delta=2  
 ORG 00h
 resVect:
