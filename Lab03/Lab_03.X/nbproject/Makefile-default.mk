@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=Lab_03.s Prueba_Lab3.s
+SOURCEFILES_QUOTED_IF_SPACED=Lab03.s
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/Lab_03.o ${OBJECTDIR}/Prueba_Lab3.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/Lab_03.o.d ${OBJECTDIR}/Prueba_Lab3.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/Lab03.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/Lab03.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/Lab_03.o ${OBJECTDIR}/Prueba_Lab3.o
+OBJECTFILES=${OBJECTDIR}/Lab03.o
 
 # Source Files
-SOURCEFILES=Lab_03.s Prueba_Lab3.s
+SOURCEFILES=Lab03.s
 
 
 
@@ -94,37 +94,21 @@ MP_PROCESSOR_OPTION=PIC16F887
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: pic-as-assembler
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/Lab_03.o: Lab_03.s  nbproject/Makefile-${CND_CONF}.mk 
+${OBJECTDIR}/Lab03.o: Lab03.s  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/Lab_03.o 
+	@${RM} ${OBJECTDIR}/Lab03.o 
 	${MP_AS} -mcpu=PIC16F887 -c \
-	-o ${OBJECTDIR}/Lab_03.o \
-	Lab_03.s \
-	 -msummary=+mem,-psect,-class,-hex,-file,-sha1,-sha256,-xml,-xmlfull -fmax-errors=20 -mwarn=0 -xassembler-with-cpp
-	
-${OBJECTDIR}/Prueba_Lab3.o: Prueba_Lab3.s  nbproject/Makefile-${CND_CONF}.mk 
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/Prueba_Lab3.o 
-	${MP_AS} -mcpu=PIC16F887 -c \
-	-o ${OBJECTDIR}/Prueba_Lab3.o \
-	Prueba_Lab3.s \
+	-o ${OBJECTDIR}/Lab03.o \
+	Lab03.s \
 	 -msummary=+mem,-psect,-class,-hex,-file,-sha1,-sha256,-xml,-xmlfull -fmax-errors=20 -mwarn=0 -xassembler-with-cpp
 	
 else
-${OBJECTDIR}/Lab_03.o: Lab_03.s  nbproject/Makefile-${CND_CONF}.mk 
+${OBJECTDIR}/Lab03.o: Lab03.s  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/Lab_03.o 
+	@${RM} ${OBJECTDIR}/Lab03.o 
 	${MP_AS} -mcpu=PIC16F887 -c \
-	-o ${OBJECTDIR}/Lab_03.o \
-	Lab_03.s \
-	 -msummary=+mem,-psect,-class,-hex,-file,-sha1,-sha256,-xml,-xmlfull -fmax-errors=20 -mwarn=0 -xassembler-with-cpp
-	
-${OBJECTDIR}/Prueba_Lab3.o: Prueba_Lab3.s  nbproject/Makefile-${CND_CONF}.mk 
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/Prueba_Lab3.o 
-	${MP_AS} -mcpu=PIC16F887 -c \
-	-o ${OBJECTDIR}/Prueba_Lab3.o \
-	Prueba_Lab3.s \
+	-o ${OBJECTDIR}/Lab03.o \
+	Lab03.s \
 	 -msummary=+mem,-psect,-class,-hex,-file,-sha1,-sha256,-xml,-xmlfull -fmax-errors=20 -mwarn=0 -xassembler-with-cpp
 	
 endif

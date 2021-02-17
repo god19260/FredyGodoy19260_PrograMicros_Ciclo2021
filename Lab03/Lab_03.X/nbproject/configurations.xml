@@ -18,8 +18,7 @@
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>Lab_03.s</itemPath>
-    <itemPath>Prueba_Lab3.s</itemPath>
+    <itemPath>Lab03.s</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

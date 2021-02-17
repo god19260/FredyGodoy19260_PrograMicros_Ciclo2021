@@ -27,10 +27,32 @@ processor 16F887
 
   
 PSECT code, delta=2, abs
-
-ORG 100h 
-
-    
+Cont: DS 2
+ 
+ORG 110h
+;goto main
+tabla:
+    clrf  PCLATH
+    bsf   PCLATH,0
+    ;andlw 0xf
+    addwf PCL
+    retlw 00111111B ; Cero
+    retlw 00000110B ;Uno
+    retlw 01011011B ;Dos
+    retlw 01001111B ;Tres
+    retlw 01100110B ;Cuatro
+    retlw 01101101B ;Cinco
+    retlw 01111101B ;Seis 
+    retlw 00000111B ;Siete
+    retlw 01111111B ;Ocho
+    retlw 01100111B ;Nueve
+    retlw 01110111B ;A
+    retlw 01111100B ;B
+    retlw 00111001B ;C
+    retlw 01011110B ;D
+    retlw 01111001B ;E
+    retlw 01110001B ;F
+ 
 main:
     BANKSEL  OSCCON
     bcf      IRCF0
@@ -61,7 +83,10 @@ main:
     bcf     TRISD,5
     bcf     TRISD,6
     bcf     TRISE,0      ; Se define el pin 0 de PORTE como salida
-    
+    bcf     TRISB,0      ; se definen los pines 0-7 de PORTD como salidas
+    bcf     TRISB,1
+    bcf     TRISB,2
+    bcf     TRISB,3
     
     
     movlw   00000111B
@@ -81,40 +106,47 @@ main:
 
 ;-------------------------------------------
 ;----------- Loop Principal ----------------
-;movlw  1111B
-;movwf  PORTB
 loop:      
-    BCF     PORTD,0
+    
+    ;movlw   0B
+    ;call    tabla
+    ;movwf   PORTD
     call    Temporizador_65ms
-    call    Temporizador_65ms
-    call    Temporizador_65ms
-    call    Temporizador_65ms
-    call    Temporizador_65ms
-    call    Temporizador_65ms
-    call    Temporizador_65ms
-    call    Temporizador_65ms
-    BSF     PORTD,0
+    
+    
     GOTO    loop
+   
+Temporizador_65ms:
+    btfss   PORTA,4
+    call    Incremento
+    ;btfss   PORTA,5
+    ;call    Decremento
+    movlw   11000001B     ; 193
+    movwf   TMR0
+    BCF     INTCON,2
+    BTFSS   INTCON,2
+    GOTO    $-1
+    RETURN
 
 Incremento:    
-    BTFSS   PORTA,0
+    BTFSS   PORTA,4
     GOTO    $-1
-    INCF    PORTB,1
-    movf    PORTB
-    ;CALL    tabla
+    INCF    Cont,1
+    movf    Cont,0
+    call    tabla
     movwf   PORTD
     RETURN
-Temporizador_65ms:
-    ;clrf   PORTD
-    movlw  11000001B     ; 193
-    movwf  TMR0
-    BCF    INTCON,2
-    BTFSS  INTCON,2
-    GOTO   $-1
+    
+Decremento:
+    BTFSS   PORTA,5
+    GOTO    $-1
+    decf    Cont,1
+    movf    Cont,0
+    call    tabla
+    movwf   PORTD
     RETURN
-
-
-    ; 01110110B ; Cero
+    
+    ; 01000000B ; Cero
     ; 00000110B ;Uno
     ; 01011011B ;Dos
     ; 01001111B ;Tres
@@ -132,3 +164,5 @@ Temporizador_65ms:
     ; 01110001B ;F
     
 end
+
+

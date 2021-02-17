@@ -1,6 +1,6 @@
-# 1 "Lab_03.s"
+# 1 "Lab03.s"
 # 1 "<built-in>" 1
-# 1 "Lab_03.s" 2
+# 1 "Lab03.s" 2
 
 ; Autor: Fredy Josue Godoy Lucero - 19260
 ; Laboratorio No. 03 - Programación de Microcontraladores
@@ -2454,7 +2454,7 @@ stk_offset SET 0
 auto_size SET 0
 ENDM
 # 7 "C:\\Program Files\\Microchip\\xc8\\v2.20\\pic\\include\\xc.inc" 2 3
-# 9 "Lab_03.s" 2
+# 9 "Lab03.s" 2
 
 ; CONFIG1
   CONFIG FOSC = INTRC_NOCLKOUT
@@ -2473,57 +2473,19 @@ ENDM
   CONFIG WRT = OFF ; Flash Program Memory Self Write Enable bits (Write protection off)
 
 ; Variables a usar
-PSECT udata_bank0
-Contador: DS 1
+
 
 PSECT code, delta=2, abs
-ORG 100h
+Cont: DS 2
 
-main:
-    BANKSEL OSCCON
-    bcf ((OSCCON) and 07Fh), 4
-    bcf ((OSCCON) and 07Fh), 5
-    bsf ((OSCCON) and 07Fh), 6
-
-
-    BANKSEL ANSEL
-    clrf ANSEL
-    clrf ANSELH
-
-    BANKSEL TRISA
-    bsf TRISA,0 ; se define el pin 0 de PORTA como entrada
-    bsf TRISA,1 ; se define el pin 1 de PORTA como entrada
-    bcf TRISC,0 ; se definen los pines 0-3 de PORTC como salidas
-    bcf TRISC,1
-    bcf TRISC,2
-    bcf TRISC,3
-    bcf TRISD,0 ; se definen los pines 0-7 de PORTD como salidas
-    bcf TRISD,1
-    bcf TRISD,2
-    bcf TRISD,3
-    bcf TRISD,4
-    bcf TRISD,5
-    bcf TRISD,6
-    bcf TRISE,0
-
-
-    movlw 00000111B
-    movwf OPTION_REG ; Se selecciona un preescaler de 256
-
-    banksel PORTA
-    clrf PORTA
-    clrf PORTC
-    clrf PORTD
-    clrf PORTE
-    clrf TMR0
-    movlw 1010000B
-    movwf INTCON
-
+ORG 110h
+;goto main
 tabla:
-
-    andlw 0x0F
-    ADDWF PCL,0;W = offset
-    retlw 01110110B ; Cero
+    clrf PCLATH
+    bsf PCLATH,0
+    ;andlw 0xf
+    addwf PCL
+    retlw 00111111B ; Cero
     retlw 00000110B ;Uno
     retlw 01011011B ;Dos
     retlw 01001111B ;Tres
@@ -2539,338 +2501,101 @@ tabla:
     retlw 01011110B ;D
     retlw 01111001B ;E
     retlw 01110001B ;F
-loop:
-    incf PORTC,1
-    call Temporizador_65ms
-    call Temporizador_65ms
-    call Temporizador_65ms
-    call Temporizador_65ms
-    call Temporizador_65ms
-    call Temporizador_65ms
-    call Temporizador_65ms
-    call Temporizador_65ms
-    ;bcf PORTE,0
 
-    goto loop
-Contadores_Iguales:
-    bsf PORTE,0
+main:
+    BANKSEL OSCCON
+    bcf ((OSCCON) and 07Fh), 4
+    bcf ((OSCCON) and 07Fh), 5
+    bsf ((OSCCON) and 07Fh), 6
+
+
+    BANKSEL ANSEL
+    clrf ANSEL
+    clrf ANSELH
+
+    BANKSEL TRISA
+    bsf TRISA,5 ; se define el pin 0 de PORTA como entrada
+    bsf TRISA,4 ; se define el pin 1 de PORTA como entrada
+    bcf TRISA,0
+    bcf TRISA,1
+    bcf TRISA,2
+    bcf TRISA,3
+    bcf TRISC,0 ; se definen los pines 0-3 de PORTC como salidas
+    bcf TRISC,1
+    bcf TRISC,2
+    bcf TRISC,3
+    bcf TRISD,0 ; se definen los pines 0-7 de PORTD como salidas
+    bcf TRISD,1
+    bcf TRISD,2
+    bcf TRISD,3
+    bcf TRISD,4
+    bcf TRISD,5
+    bcf TRISD,6
+    bcf TRISE,0 ; Se define el pin 0 de PORTE como salida
+    bcf TRISB,0 ; se definen los pines 0-7 de PORTD como salidas
+    bcf TRISB,1
+    bcf TRISB,2
+    bcf TRISB,3
+
+
+    movlw 00000111B
+    movwf OPTION_REG ; Se selecciona un preescaler de 256
+
+    banksel PORTA
+
+    clrf PORTA
     clrf PORTC
-    goto loop
+    clrf PORTD
+    clrf PORTB
+    clrf PORTE
+    clrf TMR0
+    movlw 1010000B
+    movwf INTCON
+
+
+;-------------------------------------------
+;----------- Loop Principal ----------------
+loop:
+
+    ;movlw 0B
+    ;call tabla
+    ;movwf PORTD
+    call Temporizador_65ms
+
+
+    GOTO loop
 
 Temporizador_65ms:
-    ;movlw PORTC
-    ;andwf PORTD,0
-
-    btfss PORTA,0 ; verificar si B1 esta presionado
+    btfss PORTA,4
     call Incremento
-    btfss PORTA,1 ; verificar si B2 esta presionado
-    call Decremento
+    ;btfss PORTA,5
+    ;call Decremento
     movlw 11000001B ; 193
     movwf TMR0
-    bcf INTCON,2
-    btfss INTCON,2
-    goto $-1
-    return
+    BCF INTCON,2
+    BTFSS INTCON,2
+    GOTO $-1
+    RETURN
 
 Incremento:
-    btfss PORTA,0 ; verificar si B1 esta presionado
-    goto $-1
-    incf PORTD, 1
-    movf Contador
+    BTFSS PORTA,4
+    GOTO $-1
+    INCF Cont,1
+    movf Cont,0
     call tabla
     movwf PORTD
-    goto loop
+    RETURN
+
 Decremento:
-    btfss PORTA,1 ; verificar si B2 esta presionado
-    goto $-1
-    decf PORTD,1
-    movf Contador
+    BTFSS PORTA,5
+    GOTO $-1
+    decf Cont,1
+    movf Cont,0
     call tabla
     movwf PORTD
-    goto loop
+    RETURN
 
-cero:
-    clrf PORTD
-    ;bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    ;bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 01110110B ; Cero
-Uno:
-    clrf PORTD
-    ;bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    ;bsf PORTD,3 ; Horizontal Abajo
-    ;bsf PORTD,4 ; Izquierda Abajo
-    ;bsf PORTD,5 ; Izquierda Arriba
-    ;bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ;00000110B ;Uno
-    goto loop
-Dos:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    ;bsf PORTD,2 ; Derecha Abajo
-    bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    ;bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-
-    goto loop
-Tres:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    bsf PORTD,3 ; Horizontal Abajo
-    ;bsf PORTD,4 ; Izquierda Abajo
-    ;bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    goto loop
-Cuatro:
-    clrf PORTD
-    ;bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    ;bsf PORTD,3 ; Horizontal Abajo
-    ;bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    goto loop
-Cinco:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    ;bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    bsf PORTD,3 ; Horizontal Abajo
-    ;bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    goto loop
-Seis:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    ;bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    ; 01111101B ;Seis
-    goto loop
-Siete:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    ;bsf PORTD,3 ; Horizontal Abajo
-    ;bsf PORTD,4 ; Izquierda Abajo
-    ;bsf PORTD,5 ; Izquierda Arriba
-    ;bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    ; 01111101B ;Seis
-    ; 00000111B ;Siete
-    goto loop
-Ocho:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    ; 01111101B ;Seis
-    ; 00000111B ;Siete
-    ; 01111111B ;Ocho
-    goto loop
-Nueve:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    ;bsf PORTD,3 ; Horizontal Abajo
-    ;bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    ; 01111101B ;Seis
-    ; 00000111B ;Siete
-    ; 01111111B ;Ocho
-    ; 01100111B ;Nueve
-    goto loop
-A:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    ;bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    ; 01111101B ;Seis
-    ; 00000111B ;Siete
-    ; 01111111B ;Ocho
-    ; 01100111B ;Nueve
-    ; 01110111B ;Diez
-    goto loop
-B:
-    clrf PORTD
-    ;bsf PORTD,0 ; Horizontal Arriba
-    ;bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    ; 01111101B ;Seis
-    ; 00000111B ;Siete
-    ; 01111111B ;Ocho
-    ; 01100111B ;Nueve
-    ; 01110111B ;A
-    ; 01111100B ;B
-    goto loop
-C:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    ;bsf PORTD,1 ; Derecha Arriba
-    ;bsf PORTD,2 ; Derecha Abajo
-    bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    ;bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    ; 01111101B ;Seis
-    ; 00000111B ;Siete
-    ; 01111111B ;Ocho
-    ; 01100111B ;Nueve
-    ; 01110111B ;A
-    ; 01111100B ;B
-    ; 00111001B ;C
-    goto loop
-D:
-    clrf PORTD
-    ;bsf PORTD,0 ; Horizontal Arriba
-    bsf PORTD,1 ; Derecha Arriba
-    bsf PORTD,2 ; Derecha Abajo
-    bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    ;bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    ; 01111101B ;Seis
-    ; 00000111B ;Siete
-    ; 01111111B ;Ocho
-    ; 01100111B ;Nueve
-    ; 01110111B ;A
-    ; 01111100B ;B
-    ; 00111001B ;C
-    ; 01011110B ;D
-    goto loop
-E:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    ;bsf PORTD,1 ; Derecha Arriba
-    ;bsf PORTD,2 ; Derecha Abajo
-    bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 00000110B ;Uno
-    ; 01011011B ;Dos
-    ; 01001111B ;Tres
-    ; 01100110B ;Cuatro
-    ; 01101101B ;Cinco
-    ; 01111101B ;Seis
-    ; 00000111B ;Siete
-    ; 01111111B ;Ocho
-    ; 01100111B ;Nueve
-    ; 01110111B ;A
-    ; 01111100B ;B
-    ; 00111001B ;C
-    ; 01011110B ;D
-    ; 01111001B ;E
-    goto loop
-F_:
-    clrf PORTD
-    bsf PORTD,0 ; Horizontal Arriba
-    ;bsf PORTD,1 ; Derecha Arriba
-    ;bsf PORTD,2 ; Derecha Abajo
-    ;bsf PORTD,3 ; Horizontal Abajo
-    bsf PORTD,4 ; Izquierda Abajo
-    bsf PORTD,5 ; Izquierda Arriba
-    bsf PORTD,6 ; Horizontal centro
-    ;bsf PORTD,7 ; Indicador
-    ; 01110110B ; Cero
+    ; 01000000B ; Cero
     ; 00000110B ;Uno
     ; 01011011B ;Dos
     ; 01001111B ;Tres
@@ -2886,6 +2611,5 @@ F_:
     ; 01011110B ;D
     ; 01111001B ;E
     ; 01110001B ;F
-    goto loop
 
 end
