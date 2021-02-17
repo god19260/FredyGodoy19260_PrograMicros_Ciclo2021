@@ -2473,17 +2473,21 @@ ENDM
   CONFIG WRT = OFF ; Flash Program Memory Self Write Enable bits (Write protection off)
 
 ; Variables a usar
+PSECT udata_bank0
+Cont: DS 1
 
-
+PSECT resVect, class=code, abs, delta=2
+ORG 00h
+resVect:
+    PAGESEL main
+    goto main
 PSECT code, delta=2, abs
-Cont: DS 2
 
-ORG 110h
-;goto main
+ORG 100h
 tabla:
     clrf PCLATH
     bsf PCLATH,0
-    ;andlw 0xf
+    andlw 0x0F
     addwf PCL
     retlw 00111111B ; Cero
     retlw 00000110B ;Uno
@@ -2532,10 +2536,7 @@ main:
     bcf TRISD,5
     bcf TRISD,6
     bcf TRISE,0 ; Se define el pin 0 de PORTE como salida
-    bcf TRISB,0 ; se definen los pines 0-7 de PORTD como salidas
-    bcf TRISB,1
-    bcf TRISB,2
-    bcf TRISB,3
+
 
 
     movlw 00000111B
@@ -2546,30 +2547,31 @@ main:
     clrf PORTA
     clrf PORTC
     clrf PORTD
-    clrf PORTB
+    ;clrf PORTB
     clrf PORTE
     clrf TMR0
-    movlw 1010000B
-    movwf INTCON
-
+    clrf Cont
 
 ;-------------------------------------------
 ;----------- Loop Principal ----------------
 loop:
-
-    ;movlw 0B
-    ;call tabla
-    ;movwf PORTD
     call Temporizador_65ms
-
+    call Temporizador_65ms
+    call Temporizador_65ms
+    call Temporizador_65ms
+    call Temporizador_65ms
+    call Temporizador_65ms
+    call Temporizador_65ms
+    call Temporizador_65ms
+    incf PORTC,1
 
     GOTO loop
 
 Temporizador_65ms:
     btfss PORTA,4
     call Incremento
-    ;btfss PORTA,5
-    ;call Decremento
+    btfss PORTA,5
+    call Decremento
     movlw 11000001B ; 193
     movwf TMR0
     BCF INTCON,2
@@ -2580,8 +2582,8 @@ Temporizador_65ms:
 Incremento:
     BTFSS PORTA,4
     GOTO $-1
-    INCF Cont,1
-    movf Cont,0
+    incf Cont, 1
+    movf Cont, 0
     call tabla
     movwf PORTD
     RETURN
@@ -2589,13 +2591,13 @@ Incremento:
 Decremento:
     BTFSS PORTA,5
     GOTO $-1
-    decf Cont,1
-    movf Cont,0
+    DECF Cont,1
+    movf Cont, 0
     call tabla
     movwf PORTD
     RETURN
 
-    ; 01000000B ; Cero
+    ; 00111111B ; Cero
     ; 00000110B ;Uno
     ; 01011011B ;Dos
     ; 01001111B ;Tres
