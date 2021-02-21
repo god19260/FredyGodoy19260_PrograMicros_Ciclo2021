@@ -2476,6 +2476,7 @@ ENDM
 PSECT udata_bank0
 Cont: DS 1
 
+; esta es la clave de las tablas!!!!!!!!!!!!
 PSECT resVect, class=code, abs, delta=2
 ORG 00h
 resVect:
@@ -2547,7 +2548,6 @@ main:
     clrf PORTA
     clrf PORTC
     clrf PORTD
-    ;clrf PORTB
     clrf PORTE
     clrf TMR0
     clrf Cont
@@ -2555,6 +2555,7 @@ main:
 ;-------------------------------------------
 ;----------- Loop Principal ----------------
 loop:
+    incf PORTC,1
     call Temporizador_65ms
     call Temporizador_65ms
     call Temporizador_65ms
@@ -2564,7 +2565,7 @@ loop:
     call Temporizador_65ms
     call Temporizador_65ms
     bcf PORTE,0
-    incf PORTC,1
+
     movf Cont, 0
     subwf PORTC,0
     btfsc STATUS, 2
