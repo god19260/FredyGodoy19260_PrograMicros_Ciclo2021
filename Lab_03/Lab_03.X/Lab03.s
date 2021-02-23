@@ -62,7 +62,7 @@ main:
     BANKSEL  OSCCON
     bcf      IRCF0
     bcf      IRCF1
-    bsf      IRCF2
+    bsf      IRCF2       ; 1Mhz
     
     
     BANKSEL  ANSEL
