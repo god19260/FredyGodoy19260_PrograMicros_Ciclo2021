@@ -13,9 +13,9 @@ processor 16F887
   CONFIG  MCLRE = OFF           ; RE3/MCLR pin function select bit (RE3/MCLR pin function is MCLR)
   CONFIG  CP = OFF              ; Code Protection bit (Program memory code protection is disabled)
   CONFIG  CPD = OFF             ; Data Code Protection bit (Data memory code protection is disabled)
-  CONFIG  BOREN = ON            ; Brown Out Reset Selection bits (BOR enabled)
-  CONFIG  IESO = ON             ; Internal External Switchover bit (Internal/External Switchover mode is enabled)
-  CONFIG  FCMEN = ON            ; Fail-Safe Clock Monitor Enabled bit (Fail-Safe Clock Monitor is enabled)
+  CONFIG  BOREN = OFF            ; Brown Out Reset Selection bits (BOR enabled)
+  CONFIG  IESO = OFF             ; Internal External Switchover bit (Internal/External Switchover mode is enabled)
+  CONFIG  FCMEN = OFF            ; Fail-Safe Clock Monitor Enabled bit (Fail-Safe Clock Monitor is enabled)
   CONFIG  LVP = ON              ; Low Voltage Programming Enable bit (RB3/PGM pin has PGM function, low voltage programming enabled)
 
 ; CONFIG2
@@ -24,7 +24,11 @@ processor 16F887
     
 ;---------------------------------------------------------
 ;--------------- Macros ----------------------------------
-  
+R_TMR0 macro N, arg1
+btfsc arg1
+goto $-1
+endm
+ 
 Incrementar macro Boton, puerto   ; Incrimenta con configuración pullup 
   btfsc  Boton
   incf   puerto,1
@@ -38,8 +42,12 @@ Decrementar macro Boton, puerto   ; Decrementa con configuración pullup
 ;---------------------------------------------------------
 ;------------ Variables a usar----------------------------
     ;------- Nombrar Pines ---------  
-B_Inc   EQU  0
-B_Dec   EQU  1  
+;B_Inc   EQU  0
+;B_Dec   EQU  1  
+   
+#define  B_Inc 0 
+#define  B_Dec 1 
+   
     ;------- Espacio especifico en memoria para memoria 
 PSECT udata_bank0
 
@@ -47,7 +55,7 @@ PSECT udata_bank0
     W_TEMP:      DS 1
     STATUS_TEMP: DS 1
     Cont:        DS 1
-    
+    Cont_D:       DS 1
     
 ;---------------------------------------------------------
 ;------------ Reset Vector -------------------------------
@@ -66,36 +74,40 @@ push:
     swapf  STATUS,W
     movwf  STATUS_TEMP
 isr:
+    btfsc  RBIF
+    call   contador_1
+   
     btfsc  T0IF
-    incf   PORTD
-    
-    btfss  PORTB, B_Inc
-    call   Incremento
-    btfss  PORTB, B_Dec
-    call   Decremento
-    bcf    RBIF
-    movf  PORTA,0
-    call  Display
-    movwf PORTC 
+    call   temporizador
+
     ;bcf    T0IF
-    
+    ;BCF    RBIF
 pop: 
     swapf  STATUS_TEMP,W
     movwf  STATUS
     swapf  W_TEMP, F
     swapf  W_TEMP, W
     RETFIE
+
+contador_1:
+    btfss  PORTB, B_Inc
+    incf   PORTA
+   
+    btfss  PORTB, B_Dec
+    decf   PORTA
     
-Incremento:
-    btfss    PORTB, B_Inc
-    goto     $-1
-    incf     PORTA
+    bcf    RBIF
     return
-Decremento:
-    btfss    PORTB, B_Dec
-    goto     $-1
-    decf     PORTA
+
+    
+temporizador:
+    movlw    11101101B     ; 237
+    movwf    TMR0
+    bcf      T0IF
+    incf     Cont         ; Contador Timer
     return
+    
+
 ;---------------------------------------------------------
 ;------------ Definición del Inicio ----------------------
 PSECT code, delta=2, abs
@@ -142,6 +154,7 @@ main:
     banksel  TRISA         
     bsf      TRISB, B_Inc  ; Colocar los pines B_Inc y B_Dec como entradas
     bsf      TRISB, B_Dec
+       
     movlw    11110000B     ; PORTA 0 al 3 como salidas y 4 al 7 como entradas
     movwf    TRISA
     movlw    10000000B     ; PORTC 0 al 6 como salidas y el 7 como entrada
@@ -154,7 +167,8 @@ main:
     bsf      WPUB, B_Inc   ; Activar los pullups de los pines B_Inc y B_Dec 
     bsf      WPUB, B_Dec 
     
-    
+    bcf      OPTION_REG, 5
+    bcf      OPTION_REG, 3
     bsf      OPTION_REG, 0     ; Se selecciona un preescaler de 256
     bsf      OPTION_REG, 1
     bsf      OPTION_REG, 2
@@ -164,13 +178,13 @@ main:
     bsf      IOCB, B_Inc   ; Habilitar Interrupt on change en B_Inc y B_Dec
     bsf      IOCB, B_Dec  
     
-    ;banksel  PORTA
-   ; movf     PORTB, W
- 
+    banksel  PORTA
+    movf     PORTB, W
+    
     
     banksel  INTCON
-    movlw    11101000B
-    movwf    INTCON,1
+    movlw    10101000B
+    movwf    INTCON
     ;bsf      GIE
     ;bsf      RBIE
     ;bcf      RBIF
@@ -181,12 +195,35 @@ main:
     clrf     PORTC
     clrf     PORTD
     clrf     TMR0
+    clrf     Cont_D
+    clrf     Cont
+    movlw    11101101B     ; 237
+    movwf    TMR0
+    btfss    PORTB, 0
+    nop 
 ;---------------------------------------------------------
 ;----------- Loop Forever --------------------------------    
-loop:   
+loop:  
+    movf     Cont,0      ;CONTADOR DE TIMER
+    sublw    50
+
+    btfsc    STATUS, 2
+    call     Incremento_D
+
+    movf     Cont_D,w
+    call     Display
+    movwf    PORTD
+    
+    movf     PORTA,w
+    call     Display
+    movwf    PORTC
   
     goto  loop
- 
-    ;   11101101B     ; 237
+    
+ Incremento_D:
+    incf     Cont_D   ; CONTDOR DISPLAY
+    clrf     Cont
+    return
+   
 
 end 
