@@ -1,6 +1,5 @@
 
 
-
 ; Autor: Fredy Josue Godoy Lucero - 19260
 ; Laboratorio No. 05 - Programación de Microcontraladores
 
@@ -27,6 +26,7 @@ processor 16F887
 ;---------------------------------------------------------
 ;--------------- Macros ----------------------------------
 
+  
 ;---------------------------------------------------------
 ;------------ Variables a usar----------------------------
     ;------- Nombrar Pines ---------  
@@ -35,15 +35,14 @@ processor 16F887
    
 #define  B_Inc 0 
 #define  B_Dec 1 
-    
    
     ;------- Espacio especifico en memoria para memoria 
 PSECT udata_bank0
 
 ;PSECT udata_shr  ; common memory
-    W_TEMP:       DS 1
-    STATUS_TEMP:  DS 1
-    ;Cont_D:       DS 1
+    W_TEMP:      DS 1
+    STATUS_TEMP: DS 1
+  
     
 ;---------------------------------------------------------
 ;------------ Reset Vector -------------------------------
@@ -65,9 +64,11 @@ isr:
     btfsc  RBIF
     call   contador
    
-   ; btfsc  T0IF
-   ; call   temporizador
+    btfsc  T0IF
+    call   temporizador
 
+    ;bcf    T0IF
+    ;BCF    RBIF
 pop: 
     swapf  STATUS_TEMP,W
     movwf  STATUS
@@ -76,22 +77,13 @@ pop:
     RETFIE
 
 contador:
-    ;movf PORTC,0
-    ;call Display
-    ;movwf PORTD
-    
-    ;movlw 11111111B
-    ;movwf PORTA
-    
     btfss  PORTB, B_Inc
     incf   PORTC
    
     btfss  PORTB, B_Dec
     decf   PORTC
     
-    
     bcf    RBIF
-    
     return
 
     
@@ -148,10 +140,11 @@ main:
     ; ---------- Activar pines como salidas o entradas
     banksel  TRISA         
     bsf      TRISB, B_Inc  ; Colocar los pines B_Inc y B_Dec como entradas
-    bsf      TRISB, B_Dec    
+    bsf      TRISB, B_Dec
+       
     movlw    11100000B     ; PORTA 0 al 4 como salidas y 5 al 7 como entradas
     movwf    TRISA
-    movlw    00000000B     ; PORTC todos los pines como salidas
+    movlw    00000000B     ; PORTC todos los pines como salidas 
     movwf    TRISC
     movlw    10000000B     ; PORTD 0 al 6 como salidas y el 7 como entrada
     movwf    TRISD
@@ -189,28 +182,21 @@ main:
     clrf     PORTC
     clrf     PORTD
     clrf     TMR0
-    movlw    11111111B     ; 255
+    movlw    11101101B     ; 237
     movwf    TMR0
     btfss    PORTB, 0
     nop 
 ;---------------------------------------------------------
 ;----------- Loop Forever --------------------------------    
 loop:  
-    ;call  Displays_Hex
-      
+    movf  PORTC,0
+    call  Display
+    movwf PORTD
+    
+    movlw 00011111B
+    movwf PORTA
     goto  loop
     
-Displays_Hex:
-    movf   PORTC, 0
-    call   Display
-    movwf  PORTD
-    bsf    PORTA,0
-    bcf    PORTA,1
-    
-    swapf  PORTC, 0    ; Mostrar primer display
-    call   Display
-    movwf  PORTD
-    bsf    PORTA,1
-    bcf    PORTA,0
-    return
+ 
+
 end 
