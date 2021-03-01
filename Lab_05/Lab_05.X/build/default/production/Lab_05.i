@@ -2491,6 +2491,7 @@ PSECT udata_bank0
 ;PSECT udata_shr ; common memory
     W_TEMP: DS 1
     STATUS_TEMP: DS 1
+    Cont_Displays: DS 1
 
 
 ;---------------------------------------------------------
@@ -2516,8 +2517,8 @@ isr:
     btfsc ((INTCON) and 07Fh), 2
     call temporizador
 
-    ;bcf ((INTCON) and 07Fh), 2
-    ;BCF ((INTCON) and 07Fh), 0
+    bcf ((INTCON) and 07Fh), 2
+    BCF ((INTCON) and 07Fh), 0
 pop:
     swapf STATUS_TEMP,W
     movwf STATUS
@@ -2537,10 +2538,9 @@ contador:
 
 
 temporizador:
-    movlw 11101101B ; 237
-    movwf TMR0
     bcf ((INTCON) and 07Fh), 2
-
+    movlw 11111111B ; 255
+    movwf TMR0
     return
 
 
@@ -2630,22 +2630,31 @@ main:
     clrf PORTB
     clrf PORTC
     clrf PORTD
+    clrf Cont_Displays
     clrf TMR0
-    movlw 11101101B ; 237
+    movlw 11111111B ; 255
     movwf TMR0
     btfss PORTB, 0
     nop
 ;---------------------------------------------------------
 ;----------- Loop Forever --------------------------------
 loop:
-    movf PORTC,0
+    ;call Contador_Displays
+
+    swapf PORTC,0
     call Display
     movwf PORTD
+    bsf PORTA,1
 
-    movlw 00011111B
-    movwf PORTA
+    movlw 11111111B
+    sublw Cont_Displays
+
+
     goto loop
 
+Contador_Displays:
 
+
+    return
 
 end

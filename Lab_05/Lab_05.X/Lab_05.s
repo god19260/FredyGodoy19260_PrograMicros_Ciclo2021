@@ -40,8 +40,9 @@ processor 16F887
 PSECT udata_bank0
 
 ;PSECT udata_shr  ; common memory
-    W_TEMP:      DS 1
-    STATUS_TEMP: DS 1
+    W_TEMP:         DS 1
+    STATUS_TEMP:    DS 1
+    Cont_Displays:  DS 1
   
     
 ;---------------------------------------------------------
@@ -67,8 +68,8 @@ isr:
     btfsc  T0IF
     call   temporizador
 
-    ;bcf    T0IF
-    ;BCF    RBIF
+    bcf    T0IF
+    BCF    RBIF
 pop: 
     swapf  STATUS_TEMP,W
     movwf  STATUS
@@ -88,10 +89,9 @@ contador:
 
     
 temporizador:
-    movlw    11101101B     ; 237
-    movwf    TMR0
     bcf      T0IF
-   
+    movlw    11111111B     ; 255
+    movwf    TMR0
     return
     
 
@@ -181,22 +181,31 @@ main:
     clrf     PORTB
     clrf     PORTC
     clrf     PORTD
+    clrf     Cont_Displays
     clrf     TMR0
-    movlw    11101101B     ; 237
+    movlw    11111111B     ; 255
     movwf    TMR0
     btfss    PORTB, 0
     nop 
 ;---------------------------------------------------------
 ;----------- Loop Forever --------------------------------    
 loop:  
-    movf  PORTC,0
-    call  Display
-    movwf PORTD
+    ;call     Contador_Displays
     
-    movlw 00011111B
-    movwf PORTA
+    swapf    PORTC,0
+    call     Display
+    movwf    PORTD
+    bsf      PORTA,1
+   
+    movlw    11111111B
+    sublw    Cont_Displays
+    
+
     goto  loop
+
+Contador_Displays:
     
- 
+    
+    return 
 
 end 
