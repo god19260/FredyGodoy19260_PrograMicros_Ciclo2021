@@ -33,7 +33,7 @@ __Ludata_bank3 0 0 ABS 0
 %segments
 udata_shr 70 77 COMMON 70 1
 %locals
-build/default/production/Lab_05.o
+build/default/debug/Lab_05.o
 Lab_05.s
 117 0 0 CODE 0
 120 100 0 CODE 0

@@ -37,13 +37,23 @@ processor 16F887
 #define  B_Dec 1 
    
     ;------- Espacio especifico en memoria para memoria 
-PSECT udata_bank0
+;PSECT udata_bank0
 
-;PSECT udata_shr  ; common memory
+PSECT udata_shr  ; common memory
     W_TEMP:         DS 1
     STATUS_TEMP:    DS 1
     Cont_Displays:  DS 1
-  
+    Dis_1   EQU   0
+    Dis_2   EQU   1
+    Dis_3   EQU   2
+    Dis_4   EQU   3
+    Dis_5   EQU   4
+    Bandera EQU   5
+    Display1:       DS 1
+    Display2:       DS 1
+    Display3:       DS 1
+    Display4:       DS 1
+    Display5:       DS 1
     
 ;---------------------------------------------------------
 ;------------ Reset Vector -------------------------------
@@ -62,11 +72,12 @@ push:
     swapf  STATUS,W
     movwf  STATUS_TEMP
 isr:
+    
     btfsc  RBIF
-    call   contador
+    goto   contador
    
     btfsc  T0IF
-    call   temporizador
+    goto   temporizador
 
     bcf    T0IF
     BCF    RBIF
@@ -80,19 +91,24 @@ pop:
 contador:
     btfss  PORTB, B_Inc
     incf   PORTC
-   
+    
     btfss  PORTB, B_Dec
     decf   PORTC
-    
+   
     bcf    RBIF
-    return
+    goto   isr
 
     
 temporizador:
-    bcf      T0IF
-    movlw    11111111B     ; 255
+    bsf      Cont_Displays,Bandera
+    clrf     PORTD
+    movlw    00000000B
+    movwf    PORTA
+    
+    movlw    10;246
     movwf    TMR0
-    return
+    bcf      T0IF
+    goto     isr
     
 
 ;---------------------------------------------------------
@@ -123,6 +139,7 @@ Display:
     retlw 01111001B ;E
     retlw 01110001B ;F 
  
+
 ;---------------------------------------------------------
 ;------------ Main ---------------------------------------
 main: 
@@ -131,7 +148,7 @@ main:
     BANKSEL  OSCCON
     bcf      IRCF0       ; Donfiguración del reloj interno 
     bcf      IRCF1
-    bsf      IRCF2       ; 1Mhz
+    bsf      IRCF2       ; 500khz
     
     BANKSEL  ANSEL       ; Disponer los pines como I/O Inputs
     clrf     ANSEL
@@ -156,7 +173,7 @@ main:
     
     bcf      OPTION_REG, 5
     bcf      OPTION_REG, 3
-    bsf      OPTION_REG, 0     ; Se selecciona un preescaler de 256
+    bcf      OPTION_REG, 0     ; Se selecciona un preescaler de 128
     bsf      OPTION_REG, 1
     bsf      OPTION_REG, 2
     
@@ -183,29 +200,105 @@ main:
     clrf     PORTD
     clrf     Cont_Displays
     clrf     TMR0
-    movlw    11111111B     ; 255
+    movlw    10;246       ; n de timer0
     movwf    TMR0
     btfss    PORTB, 0
     nop 
+    ;bsf      Cont_Displays, Dis_1
 ;---------------------------------------------------------
 ;----------- Loop Forever --------------------------------    
 loop:  
-    ;call     Contador_Displays
     
-    swapf    PORTC,0
-    call     Display
-    movwf    PORTD
-    bsf      PORTA,1
-   
-    movlw    11111111B
-    sublw    Cont_Displays
+    call    Display_1Y2
     
-
+    btfsc   Cont_Displays,Bandera
+    goto    Display7seg
+    
     goto  loop
-
-Contador_Displays:
     
+Display_1Y2:
     
-    return 
-
+    movf    PORTC,0
+    andlw   0x0f
+    call    Display
+    movwf   Display1
+    
+    swapf   PORTC,0
+    andlw   0x0f
+    call    Display
+    movwf   Display2
+    
+    return
+    
+Display7seg:
+    ;clrf    PORTD
+    
+    bcf     Cont_Displays, Bandera
+    
+    btfsc   Cont_Displays, Dis_1     ; Debe encender el display 2
+    goto    Encender_Dis2
+    
+    btfsc   Cont_Displays, Dis_2     ; Debe encender el display 3
+    goto    Encender_Dis3
+    
+    btfsc   Cont_Displays, Dis_3     ; Debe encender el display 4
+    goto    Encender_Dis4
+    
+    btfsc   Cont_Displays, Dis_4     ; Debe encender el display 5
+    goto    Encender_Dis5 
+    
+    btfsc   Cont_Displays, Dis_5     ; Debe encender el display 1
+    goto    Encender_Dis1
+    
+    goto    loop
+    
+Encender_Dis1:
+    movf    Display1,0
+    movwf   PORTD
+    
+    movlw   00000001B
+    movwf   PORTA
+    ;bsf     PORTC,0
+    bcf     Cont_Displays, Dis_5
+    bsf     Cont_Displays, Dis_1
+    
+    goto    loop
+Encender_Dis2:
+    movf    Display2,0
+    movwf   PORTD 
+    movlw   00000010B
+    movwf   PORTA
+    ;bsf     PORTC,1
+    bcf     Cont_Displays, Dis_1
+    bsf     Cont_Displays, Dis_2
+    
+    goto    loop
+Encender_Dis3:
+    
+    movlw   00000100B
+    movwf   PORTA
+    ;bsf     PORTC,2
+    bcf     Cont_Displays, Dis_2
+    bsf     Cont_Displays, Dis_3
+    
+    goto    loop
+Encender_Dis4:
+    
+    movlw   00001000B
+    movwf   PORTA
+    ;bsf     PORTC,3
+    bcf     Cont_Displays, Dis_3
+    bsf     Cont_Displays, Dis_4
+    
+    goto    loop
+Encender_Dis5:
+    
+    movlw   00010000B
+    movwf   PORTA
+    ;bsf     PORTC,4
+    bcf     Cont_Displays, Dis_4
+    bsf     Cont_Displays, Dis_5
+    
+    goto    loop 
+    
 end 

@@ -11,7 +11,7 @@
 # All addresses and the length are given in unqualified hexadecimal
 # in delta units.  Any other numeric values are decimal.
 %PSECTS
-$build/default/production/Lab_05.o
+$build/default/debug/Lab_05.o
 resVect code 0 0 0 20 2
 code CODE 0 0 0 17E 2
 udata_shr COMMON 1 70 70 8 1
@@ -50,7 +50,7 @@ STRING 2FC-1FFF 1
 # are in ascending order of addresses.
 # All other numeric values are in decimal.
 %LINETAB
-$build/default/production/Lab_05.o
+$build/default/debug/Lab_05.o
 0 resVect code >61:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
 0 resVect code >62:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
 0 resVect code >63:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
