@@ -2481,10 +2481,7 @@ ENDM
     ;------- Nombrar Pines ---------
 ;B_Inc EQU 0
 ;B_Dec EQU 1
-
-
-
-
+# 46 "Lab_05.s"
     ;------- Espacio especifico en memoria para memoria
 ;PSECT udata_bank0
 
@@ -2492,12 +2489,12 @@ PSECT udata_shr ; common memory
     W_TEMP: DS 1
     STATUS_TEMP: DS 1
     Cont_Displays: DS 1
-    Dis_1 EQU 0
-    Dis_2 EQU 1
-    Dis_3 EQU 2
-    Dis_4 EQU 3
-    Dis_5 EQU 4
-    Bandera EQU 5
+
+
+
+
+
+
     Display1: DS 1
     Display2: DS 1
     Display3: DS 1
@@ -2538,10 +2535,10 @@ pop:
     RETFIE
 
 contador:
-    btfss PORTB, 0
+    btfss PORTB, 6
     incf PORTC
 
-    btfss PORTB, 1
+    btfss PORTB, 7
     decf PORTC
 
     bcf ((INTCON) and 07Fh), 0
@@ -2549,12 +2546,12 @@ contador:
 
 
 temporizador:
-    bsf Cont_Displays,Bandera
+    bsf Cont_Displays,5
     clrf PORTD
-    movlw 00000000B
-    movwf PORTA
+    ;movlw 00000000B
+    ;movwf PORTA
 
-    movlw 10;246
+    movlw 246
     movwf TMR0
     bcf ((INTCON) and 07Fh), 2
     goto isr
@@ -2605,8 +2602,8 @@ main:
 
     ; ---------- Activar pines como salidas o entradas
     banksel TRISA
-    bsf TRISB, 0 ; Colocar los pines 0 y 1 como entradas
-    bsf TRISB, 1
+    bsf TRISB, 6 ; Colocar los pines 6 y 7 como entradas
+    bsf TRISB, 7
 
     movlw 11100000B ; PORTA 0 al 4 como salidas y 5 al 7 como entradas
     movwf TRISA
@@ -2617,8 +2614,8 @@ main:
 
     banksel OPTION_REG
     bcf OPTION_REG, 7
-    bsf WPUB, 0 ; Activar los pullups de los pines 0 y 1
-    bsf WPUB, 1
+    bsf WPUB, 6 ; Activar los pullups de los pines 6 y 7
+    bsf WPUB, 7
 
     bcf OPTION_REG, 5
     bcf OPTION_REG, 3
@@ -2628,8 +2625,8 @@ main:
 
 
     banksel IOCB
-    bsf IOCB, 0 ; Habilitar Interrupt on change en 0 y 1
-    bsf IOCB, 1
+    bsf IOCB, 6 ; Habilitar Interrupt on change en 6 y 7
+    bsf IOCB, 7
 
     banksel PORTA
     movf PORTB, W
@@ -2649,18 +2646,16 @@ main:
     clrf PORTD
     clrf Cont_Displays
     clrf TMR0
-    movlw 10;246 ; n de timer0
+    movlw 246 ; n de timer0
     movwf TMR0
     btfss PORTB, 0
     nop
-    ;bsf Cont_Displays, Dis_1
+    bsf Cont_Displays, 0
 ;---------------------------------------------------------
 ;----------- Loop Forever --------------------------------
 loop:
 
-    call Display_1Y2
-
-    btfsc Cont_Displays,Bandera
+    btfsc Cont_Displays,5
     goto Display7seg
 
     goto loop
@@ -2680,23 +2675,23 @@ Display_1Y2:
     return
 
 Display7seg:
-    ;clrf PORTD
 
-    bcf Cont_Displays, Bandera
+    call Display_1Y2
+    bcf Cont_Displays, 5
 
-    btfsc Cont_Displays, Dis_1 ; Debe encender el display 2
+    btfsc Cont_Displays, 0 ; Debe encender el display 2
     goto Encender_Dis2
 
-    btfsc Cont_Displays, Dis_2 ; Debe encender el display 3
+    btfsc Cont_Displays, 1 ; Debe encender el display 3
     goto Encender_Dis3
 
-    btfsc Cont_Displays, Dis_3 ; Debe encender el display 4
+    btfsc Cont_Displays, 2 ; Debe encender el display 4
     goto Encender_Dis4
 
-    btfsc Cont_Displays, Dis_4 ; Debe encender el display 5
+    btfsc Cont_Displays, 3 ; Debe encender el display 5
     goto Encender_Dis5
 
-    btfsc Cont_Displays, Dis_5 ; Debe encender el display 1
+    btfsc Cont_Displays, 4 ; Debe encender el display 1
     goto Encender_Dis1
 
     goto loop
@@ -2708,8 +2703,8 @@ Encender_Dis1:
     movlw 00000001B
     movwf PORTA
     ;bsf PORTC,0
-    bcf Cont_Displays, Dis_5
-    bsf Cont_Displays, Dis_1
+    bcf Cont_Displays, 4
+    bsf Cont_Displays, 0
 
     goto loop
 Encender_Dis2:
@@ -2718,8 +2713,8 @@ Encender_Dis2:
     movlw 00000010B
     movwf PORTA
     ;bsf PORTC,1
-    bcf Cont_Displays, Dis_1
-    bsf Cont_Displays, Dis_2
+    bcf Cont_Displays, 0
+    bsf Cont_Displays, 1
 
     goto loop
 Encender_Dis3:
@@ -2727,8 +2722,8 @@ Encender_Dis3:
     movlw 00000100B
     movwf PORTA
     ;bsf PORTC,2
-    bcf Cont_Displays, Dis_2
-    bsf Cont_Displays, Dis_3
+    bcf Cont_Displays, 1
+    bsf Cont_Displays, 2
 
     goto loop
 Encender_Dis4:
@@ -2736,8 +2731,8 @@ Encender_Dis4:
     movlw 00001000B
     movwf PORTA
     ;bsf PORTC,3
-    bcf Cont_Displays, Dis_3
-    bsf Cont_Displays, Dis_4
+    bcf Cont_Displays, 2
+    bsf Cont_Displays, 3
 
     goto loop
 Encender_Dis5:
@@ -2745,8 +2740,8 @@ Encender_Dis5:
     movlw 00010000B
     movwf PORTA
     ;bsf PORTC,4
-    bcf Cont_Displays, Dis_4
-    bsf Cont_Displays, Dis_5
+    bcf Cont_Displays, 3
+    bsf Cont_Displays, 4
 
     goto loop
 

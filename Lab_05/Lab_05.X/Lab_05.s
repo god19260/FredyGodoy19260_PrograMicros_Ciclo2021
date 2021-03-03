@@ -33,9 +33,16 @@ processor 16F887
 ;B_Inc   EQU  0
 ;B_Dec   EQU  1  
    
-#define  B_Inc 0 
-#define  B_Dec 1 
-   
+#define  B_Inc 6 
+#define  B_Dec 7 
+    /*
+    Dis_1   EQU   0
+    Dis_2   EQU   1
+    Dis_3   EQU   2
+    Dis_4   EQU   3
+    Dis_5   EQU   4
+    Bandera EQU   5  
+    */
     ;------- Espacio especifico en memoria para memoria 
 ;PSECT udata_bank0
 
@@ -43,12 +50,12 @@ PSECT udata_shr  ; common memory
     W_TEMP:         DS 1
     STATUS_TEMP:    DS 1
     Cont_Displays:  DS 1
-    Dis_1   EQU   0
-    Dis_2   EQU   1
-    Dis_3   EQU   2
-    Dis_4   EQU   3
-    Dis_5   EQU   4
-    Bandera EQU   5
+    #define    Dis_1   0
+    #define    Dis_2   1
+    #define    Dis_3   2
+    #define    Dis_4   3
+    #define    Dis_5   4
+    #define    Bandera 5
     Display1:       DS 1
     Display2:       DS 1
     Display3:       DS 1
@@ -102,10 +109,10 @@ contador:
 temporizador:
     bsf      Cont_Displays,Bandera
     clrf     PORTD
-    movlw    00000000B
-    movwf    PORTA
+    ;movlw    00000000B
+    ;movwf    PORTA
     
-    movlw    10;246
+    movlw    246
     movwf    TMR0
     bcf      T0IF
     goto     isr
@@ -200,17 +207,15 @@ main:
     clrf     PORTD
     clrf     Cont_Displays
     clrf     TMR0
-    movlw    10;246       ; n de timer0
+    movlw    246       ; n de timer0
     movwf    TMR0
     btfss    PORTB, 0
     nop 
-    ;bsf      Cont_Displays, Dis_1
+    bsf      Cont_Displays, Dis_1
 ;---------------------------------------------------------
 ;----------- Loop Forever --------------------------------    
 loop:  
-    
-    call    Display_1Y2
-    
+     
     btfsc   Cont_Displays,Bandera
     goto    Display7seg
     
@@ -231,8 +236,8 @@ Display_1Y2:
     return
     
 Display7seg:
-    ;clrf    PORTD
     
+    call    Display_1Y2
     bcf     Cont_Displays, Bandera
     
     btfsc   Cont_Displays, Dis_1     ; Debe encender el display 2
