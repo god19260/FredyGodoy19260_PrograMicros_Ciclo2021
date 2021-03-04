@@ -2475,13 +2475,61 @@ ENDM
 ;---------------------------------------------------------
 ;--------------- Macros ----------------------------------
 
+Division macro Dividendo, Divisor, Resultado_Division
+    ;clrf PORTC
+    clrf Resultado_Division
+    movlw Divisor
+    andlw 0x0f
+    movwf Divisor
+
+    movlw Dividendo
+    andlw 0x0f
+    movwf Resultado_Resta
+
+    movlw Resultado_Resta
+    btfsc STATUS,2
+    goto no_valido
+
+    movlw Divisor
+    btfsc STATUS,2
+    goto no_valido
+
+ Valido: ; Divisor y Dividendo deben ser diferentes a cero
+    movlw Divisor
+    subwf Resultado_Resta,1
+    btfsc STATUS,2
+    goto cero
+    btfsc STATUS,0
+    goto carry
+    incf Resultado_Division,1
+    bsf PORTC,1
+    goto Valido
+ carry:
+    ;bsf PORTC,0
+    goto fin
+ cero:
+    incf Resultado_Division,1
+    ;bsf PORTC,4
+    goto fin
+ no_valido:
+    movlw 0B
+    movwf Resultado_Division
+
+  fin:
+ endm ; End del macro Division
+
+
+;Division 1111B, 11B, Resultado_Div
 
 ;---------------------------------------------------------
 ;------------ Variables a usar----------------------------
     ;------- Nombrar Pines ---------
 ;B_Inc EQU 0
 ;B_Dec EQU 1
-# 46 "Lab_05.s"
+
+
+
+
     ;------- Espacio especifico en memoria para memoria
 ;PSECT udata_bank0
 
@@ -2500,6 +2548,13 @@ PSECT udata_shr ; common memory
     Display3: DS 1
     Display4: DS 1
     Display5: DS 1
+    Centenas: DS 1
+    Decenas: DS 1
+    Unidades: DS 1
+    Resultado_Div: DS 1
+    Resultado_Resta:DS 1 ; Variable macro
+    ;Dividendo: DS 1
+    ;Divisor: DS 1
 
 ;---------------------------------------------------------
 ;------------ Reset Vector -------------------------------
@@ -2645,6 +2700,11 @@ main:
     clrf PORTC
     clrf PORTD
     clrf Cont_Displays
+    clrf Centenas
+    clrf Decenas
+    clrf Unidades
+    clrf Resultado_Div
+    clrf Resultado_Resta
     clrf TMR0
     movlw 246 ; n de timer0
     movwf TMR0
@@ -2654,7 +2714,7 @@ main:
 ;---------------------------------------------------------
 ;----------- Loop Forever --------------------------------
 loop:
-
+    ;Division 11B, 10B, Resultado_Div
     btfsc Cont_Displays,5
     goto Display7seg
 
@@ -2671,6 +2731,11 @@ Display_1Y2:
     andlw 0x0f
     call Display
     movwf Display2
+
+    Division 1111B, 11B, Resultado_Div
+    ;Division 111B, 10B, Resultado_Div
+    movlw Resultado_Div
+    movwf PORTC
 
     return
 
@@ -2700,7 +2765,7 @@ Encender_Dis1:
     movf Display1,0
     movwf PORTD
 
-    movlw 00000001B
+    movlw 11111110B ; Anodo:00000001B Catodo:11111110B
     movwf PORTA
     ;bsf PORTC,0
     bcf Cont_Displays, 4
@@ -2710,7 +2775,7 @@ Encender_Dis1:
 Encender_Dis2:
     movf Display2,0
     movwf PORTD
-    movlw 00000010B
+    movlw 11111101B ; Anodo:00000010B Catodo:11111101B
     movwf PORTA
     ;bsf PORTC,1
     bcf Cont_Displays, 0
@@ -2718,8 +2783,9 @@ Encender_Dis2:
 
     goto loop
 Encender_Dis3:
-
-    movlw 00000100B
+    ;movf Display3
+    ;movwf PORTD
+    movlw 11111011B ; Anado:00000100B Catodo:11111011B
     movwf PORTA
     ;bsf PORTC,2
     bcf Cont_Displays, 1
@@ -2727,22 +2793,30 @@ Encender_Dis3:
 
     goto loop
 Encender_Dis4:
-
-    movlw 00001000B
+    movlw 11110111B ; Anodo:00001000B Catodo:11110111B
     movwf PORTA
     ;bsf PORTC,3
     bcf Cont_Displays, 2
     bsf Cont_Displays, 3
 
     goto loop
-Encender_Dis5:
 
-    movlw 00010000B
+Encender_Dis5:
+    movlw 11101111B ; Anodo:00010000B Catodo:11101111B
     movwf PORTA
     ;bsf PORTC,4
     bcf Cont_Displays, 3
     bsf Cont_Displays, 4
 
     goto loop
+
+;Division:
+
+ ; return
+Cen_Dec_Uni:
+
+
+
+    return
 
 end
