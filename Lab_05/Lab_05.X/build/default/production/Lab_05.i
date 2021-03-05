@@ -2498,14 +2498,12 @@ Division macro Dividendo, Divisor, Resultado_Division,var_in1
     goto carry
 
     incf Resultado_Division,1
-    ;bsf PORTC,1
     goto Valido
  carry:
     bsf PORTC,2
     goto fin
  cero:
     incf Resultado_Division,1
-    ;bsf PORTC,4
     goto fin
  no_valido:
     movlw 0B
@@ -2711,6 +2709,7 @@ main:
 ;----------- Loop Forever --------------------------------
 loop:
     ;Division 11B, 10B, Resultado_Div
+
     btfsc Cont_Displays,5
     goto Display7seg
 
@@ -2728,10 +2727,11 @@ Display_1Y2:
     call Display
     movwf Display2
 
-    Division 00010100B, 0B, Resultado_Div,Resultado_Resta
-    ;Division 111B, 10B, Resultado_Div
+    Division 01100100B, 00010100B, Resultado_Div,Resultado_Resta
     movf Resultado_Div,0
-    movwf PORTC
+    andlw 0x0f
+    call Display
+    movwf Display3
 
     return
 
@@ -2779,8 +2779,8 @@ Encender_Dis2:
 
     goto loop
 Encender_Dis3:
-    ;movf Display3
-    ;movwf PORTD
+    movf Display3
+    movwf PORTD
     movlw 11111011B ; Anado:00000100B Catodo:11111011B
     movwf PORTA
     ;bsf PORTC,2
