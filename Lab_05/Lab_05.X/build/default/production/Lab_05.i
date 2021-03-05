@@ -2597,9 +2597,6 @@ contador:
 temporizador:
     bsf Cont_Displays,5
     clrf PORTD
-    ;movlw 00000000B
-    ;movwf PORTA
-
     movlw 246
     movwf TMR0
     bcf ((INTCON) and 07Fh), 2
@@ -2810,7 +2807,7 @@ Encender_Dis1:
     movf Display1,0
     movwf PORTD
 
-    movlw 11111110B ; Anodo:00000001B Catodo:11111110B
+    movlw 00000001B ; Anodo:00000001B Catodo:11111110B
     movwf PORTA
     ;bsf PORTC,0
     bcf Cont_Displays, 4
@@ -2820,7 +2817,7 @@ Encender_Dis1:
 Encender_Dis2:
     movf Display2,0
     movwf PORTD
-    movlw 11111101B ; Anodo:00000010B Catodo:11111101B
+    movlw 00000010B ; Anodo:00000010B Catodo:11111101B
     movwf PORTA
     ;bsf PORTC,1
     bcf Cont_Displays, 0
@@ -2830,7 +2827,7 @@ Encender_Dis2:
 Encender_Dis3:
     movf Display3,0
     movwf PORTD
-    movlw 11111011B ; Anado:00000100B Catodo:11111011B
+    movlw 00000100B ; Anado:00000100B Catodo:11111011B
     movwf PORTA
     ;bsf PORTC,2
     bcf Cont_Displays, 1
@@ -2840,7 +2837,7 @@ Encender_Dis3:
 Encender_Dis4:
     movf Display4,0
     movwf PORTD
-    movlw 11110111B ; Anodo:00001000B Catodo:11110111B
+    movlw 00001000B ; Anodo:00001000B Catodo:11110111B
     movwf PORTA
     ;bsf PORTC,3
     bcf Cont_Displays, 2
@@ -2851,7 +2848,7 @@ Encender_Dis4:
 Encender_Dis5:
     movf Display5,0
     movwf PORTD
-    movlw 11101111B ; Anodo:00010000B Catodo:11101111B
+    movlw 00010000B ; Anodo:00010000B Catodo:11101111B
     movwf PORTA
     ;bsf PORTC,4
     bcf Cont_Displays, 3
