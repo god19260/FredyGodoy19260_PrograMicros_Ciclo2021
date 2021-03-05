@@ -97,8 +97,9 @@ PSECT udata_shr  ; common memory
     Unidades:       DS 1
     Resultado_Div:  DS 1
     Resultado_Resta:DS 1  ; Variable macro 
+    Divisor:        DS 1
     Dividendo_Ingreso:      DS 1
-    
+    Contador:       DS 1
     
 ;---------------------------------------------------------
 ;------------ Reset Vector -------------------------------
@@ -250,6 +251,8 @@ main:
     clrf     Resultado_Div
     clrf     Resultado_Resta
     clrf     Dividendo_Ingreso
+    clrf     Contador
+    clrf     Divisor
     clrf     TMR0
     movlw    246       ; n de timer0
     movwf    TMR0
@@ -280,12 +283,16 @@ Display_1Y2:
     movwf   Display2
     
     return
-    
+Subrutina_Div:
+    Division Dividendo_Ingreso, Divisor, Resultado_Div,Resultado_Resta
+    return
 Display_3_4_5:
 Centena:
     movf  PORTC,0
     movwf Dividendo_Ingreso
-    Division Dividendo_Ingreso, 01100100B, Resultado_Div,Resultado_Resta
+    movlw 100
+    movwf Divisor
+    call  Subrutina_Div;Division Dividendo_Ingreso, 01100100B, Resultado_Div,Resultado_Resta
     movf    Resultado_Div,0
     andlw   0x0f
     call    Display
@@ -293,16 +300,30 @@ Centena:
 
 Decena:
     
-
-Unidad:
-
-
+    movf  Resultado_Div,0
+    subwf Dividendo_Ingreso,1
+    incf  Contador,1
+    movlw 10
+    subwf Contador,0
+    btfss STATUS,2
+    goto  Decena
+    movlw 10
+    movwf Divisor
+    call  Subrutina_Div;Division Dividendo_Ingreso, 1010B, Resultado_Div,Resultado_Resta
+    movf    Resultado_Div,0
+    andlw   0x0f
+    call    Display
+    movwf   Display4
 return
+Unidad:
+return
+
+
     
 Display7seg:
     
     call    Display_1Y2
-    call    Display_3_4_5
+    ;call    Display_3_4_5
     bcf     Cont_Displays, Bandera
     
     btfsc   Cont_Displays, Dis_1     ; Debe encender el display 2
@@ -354,7 +375,7 @@ Encender_Dis3:
     
     goto    loop
 Encender_Dis4:
-    movf    Display4,0
+    movf    Display4
     movwf   PORTD 
     movlw   11110111B ; Anodo:00001000B  Catodo:11110111B
     movwf   PORTA
@@ -375,13 +396,5 @@ Encender_Dis5:
     
     goto    loop 
 
-;Division:
-    
- ;   return
-Cen_Dec_Uni:
-    
-    
-    
-    return
- 
+
 end 
