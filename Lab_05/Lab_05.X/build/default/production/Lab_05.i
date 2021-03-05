@@ -2544,7 +2544,7 @@ PSECT udata_shr ; common memory
     Centenas: DS 1
     Decenas: DS 1
     Unidades: DS 1
-    Resultado_Div: DS 1
+    Cont_8bits: DS 1
     Resultado_Resta:DS 1 ; Variable macro
     Divisor: DS 1
     Dividendo_Ingreso: DS 1
@@ -2697,11 +2697,12 @@ main:
     clrf Centenas
     clrf Decenas
     clrf Unidades
-    clrf Resultado_Div
+    ;clrf Resultado_Div
     clrf Resultado_Resta
     clrf Dividendo_Ingreso
     clrf Contador
     clrf Divisor
+    clrf Cont_8bits
     clrf TMR0
     movlw 246 ; n de timer0
     movwf TMR0
@@ -2732,39 +2733,52 @@ Display_1Y2:
     movwf Display2
 
     return
-Subrutina_Div:
-    Division Dividendo_Ingreso, Divisor, Resultado_Div,Resultado_Resta
-    return
+
 Display_3_4_5:
-Centena:
     movf PORTC,0
-    movwf Dividendo_Ingreso
-    movlw 100
-    movwf Divisor
-    call Subrutina_Div;Division Dividendo_Ingreso, 01100100B, Resultado_Div,Resultado_Resta
-    movf Resultado_Div,0
+    movwf Cont_8bits
+    clrf Centenas
+    clrf Decenas
+    clrf Unidades
+    Centena:
+    movlw 01100100B
+    subwf Cont_8bits,1
+    incf Centenas,1
+    btfsc STATUS,0
+    goto Centena
+    movlw 01100100B
+    addwf Cont_8bits,1
+    decf Centenas,1
+    movf Centenas,0
     andlw 0x0f
     call Display
     movwf Display5
-
-Decena:
-
-    movf Resultado_Div,0
-    subwf Dividendo_Ingreso,1
-    incf Contador,1
+    Decena:
     movlw 10
-    subwf Contador,0
-    btfss STATUS,2
+    subwf Cont_8bits,1
+    incf Decenas,1
+    btfsc STATUS,0
     goto Decena
     movlw 10
-    movwf Divisor
-    call Subrutina_Div;Division Dividendo_Ingreso, 1010B, Resultado_Div,Resultado_Resta
-    movf Resultado_Div,0
+    addwf Cont_8bits,1
+    decf Decenas,1
+    movf Decenas,0
     andlw 0x0f
     call Display
     movwf Display4
-return
-Unidad:
+    Unidad:
+    movlw 1
+    subwf Cont_8bits,1
+    incf Unidades,1
+    btfsc STATUS,0
+    goto Unidad
+    movlw 1
+    addwf Cont_8bits,1
+    decf Unidades,1
+    movf Unidades,0
+    andlw 0x0f
+    call Display
+    movwf Display3
 return
 
 
@@ -2772,7 +2786,7 @@ return
 Display7seg:
 
     call Display_1Y2
-    ;call Display_3_4_5
+    call Display_3_4_5
     bcf Cont_Displays, 5
 
     btfsc Cont_Displays, 0 ; Debe encender el display 2
@@ -2824,7 +2838,7 @@ Encender_Dis3:
 
     goto loop
 Encender_Dis4:
-    movf Display4
+    movf Display4,0
     movwf PORTD
     movlw 11110111B ; Anodo:00001000B Catodo:11110111B
     movwf PORTA
@@ -2835,7 +2849,7 @@ Encender_Dis4:
     goto loop
 
 Encender_Dis5:
-    movf Display5
+    movf Display5,0
     movwf PORTD
     movlw 11101111B ; Anodo:00010000B Catodo:11101111B
     movwf PORTA
