@@ -30,12 +30,12 @@ Division macro Dividendo, Divisor, Resultado_Division,var_in1
     ;clrf   PORTC
     clrf   Resultado_Division
 
-    movlw  Dividendo
-    addwf  Divisor,0
-    btfsc  STATUS,2
-    goto   no_valido
+    ;movf   Dividendo,0
+    ;addwf  Divisor,0
+    ;btfsc  STATUS,2
+    ;goto   no_valido
     
-    movlw  Dividendo
+    movf   Dividendo,0
     movwf  var_in1
     
  Valido:        ; Divisor y Dividendo deben ser diferentes a cero
@@ -51,7 +51,6 @@ Division macro Dividendo, Divisor, Resultado_Division,var_in1
     incf   Resultado_Division,1
     goto   Valido
  carry:
-    bsf    PORTC,2
     goto   fin
  cero:
     incf   Resultado_Division,1
@@ -98,8 +97,8 @@ PSECT udata_shr  ; common memory
     Unidades:       DS 1
     Resultado_Div:  DS 1
     Resultado_Resta:DS 1  ; Variable macro 
-    ;Dividendo:      DS 1
-    ;Divisor:        DS 1
+    Dividendo_Ingreso:      DS 1
+    
     
 ;---------------------------------------------------------
 ;------------ Reset Vector -------------------------------
@@ -250,6 +249,7 @@ main:
     clrf     Unidades
     clrf     Resultado_Div
     clrf     Resultado_Resta
+    clrf     Dividendo_Ingreso
     clrf     TMR0
     movlw    246       ; n de timer0
     movwf    TMR0
@@ -260,6 +260,7 @@ main:
 ;----------- Loop Forever --------------------------------    
 loop:  
     ;Division 11B, 10B, Resultado_Div
+    
     
     btfsc   Cont_Displays,Bandera
     goto    Display7seg
@@ -278,17 +279,30 @@ Display_1Y2:
     call    Display
     movwf   Display2
     
-    Division 01100100B, 00010100B, Resultado_Div,Resultado_Resta
+    return
+    
+Display_3_4_5:
+Centena:
+    movf  PORTC,0
+    movwf Dividendo_Ingreso
+    Division Dividendo_Ingreso, 01100100B, Resultado_Div,Resultado_Resta
     movf    Resultado_Div,0
     andlw   0x0f
     call    Display
-    movwf   Display3
+    movwf   Display5
+
+Decena:
     
-    return
+
+Unidad:
+
+
+return
     
 Display7seg:
     
     call    Display_1Y2
+    call    Display_3_4_5
     bcf     Cont_Displays, Bandera
     
     btfsc   Cont_Displays, Dis_1     ; Debe encender el display 2
@@ -330,7 +344,7 @@ Encender_Dis2:
     
     goto    loop
 Encender_Dis3:
-    movf    Display3
+    movf    Display3,0
     movwf   PORTD 
     movlw   11111011B ; Anado:00000100B  Catodo:11111011B
     movwf   PORTA
@@ -340,6 +354,8 @@ Encender_Dis3:
     
     goto    loop
 Encender_Dis4:
+    movf    Display4,0
+    movwf   PORTD 
     movlw   11110111B ; Anodo:00001000B  Catodo:11110111B
     movwf   PORTA
     ;bsf     PORTC,3
@@ -349,6 +365,8 @@ Encender_Dis4:
     goto    loop
 
 Encender_Dis5:
+    movf    Display5
+    movwf   PORTD 
     movlw   11101111B ; Anodo:00010000B  Catodo:11101111B
     movwf   PORTA
     ;bsf     PORTC,4
