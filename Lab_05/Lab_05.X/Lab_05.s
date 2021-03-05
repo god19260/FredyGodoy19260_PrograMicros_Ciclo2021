@@ -26,37 +26,33 @@ processor 16F887
 ;---------------------------------------------------------
 ;--------------- Macros ----------------------------------
 
-Division macro Dividendo, Divisor, Resultado_Division
+Division macro Dividendo, Divisor, Resultado_Division,var_in1
     ;clrf   PORTC
     clrf   Resultado_Division
-    movlw  Divisor
-    andlw  0x0f
-    movwf  Divisor
+
+    movlw  Dividendo
+    addwf  Divisor,0
+    btfsc  STATUS,2
+    goto   no_valido
     
     movlw  Dividendo
-    andlw  0x0f
-    movwf  Resultado_Resta
-    
-    movlw  Resultado_Resta
-    btfsc  STATUS,2
-    goto   no_valido
-    
-    movlw  Divisor
-    btfsc  STATUS,2
-    goto   no_valido
+    movwf  var_in1
     
  Valido:        ; Divisor y Dividendo deben ser diferentes a cero
     movlw  Divisor
-    subwf  Resultado_Resta,1
+    subwf  var_in1,1
+    
     btfsc  STATUS,2
     goto   cero
-    btfsc  STATUS,0
+    
+    btfss  STATUS,0
     goto   carry
+    
     incf   Resultado_Division,1
-    bsf    PORTC,1
+    ;bsf    PORTC,1
     goto   Valido
  carry:
-    ;bsf    PORTC,0
+    bsf    PORTC,2
     goto   fin
  cero:
     incf   Resultado_Division,1
@@ -70,7 +66,7 @@ Division macro Dividendo, Divisor, Resultado_Division
  endm            ; End del macro Division 
  
   
-;Division 1111B, 11B, Resultado_Div
+;Division 00010100B, 0B, Resultado_Div,Resultado_Resta
  
 ;---------------------------------------------------------
 ;------------ Variables a usar----------------------------
@@ -283,9 +279,9 @@ Display_1Y2:
     call    Display
     movwf   Display2
     
-    Division 1111B, 11B, Resultado_Div
+    Division 00010100B, 0B, Resultado_Div,Resultado_Resta
     ;Division 111B, 10B, Resultado_Div
-    movlw     Resultado_Div
+    movf     Resultado_Div,0
     movwf    PORTC
     
     return
