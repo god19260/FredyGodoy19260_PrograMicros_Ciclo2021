@@ -13,7 +13,7 @@
 %PSECTS
 $build/default/production/Lab_05.o
 resVect code 0 0 0 1E 2
-code CODE 0 0 0 1B8 2
+code CODE 0 0 0 1B7 2
 udata_shr COMMON 1 70 70 10 1
 config CONFIG 4 2007 2007 2 2
 # %UNUSED Section
@@ -30,12 +30,12 @@ BANK0 20-6F 1
 BANK1 A0-EF 1
 BANK2 110-16F 1
 BANK3 190-1EF 1
-CONST 370-1FFF 1
-ENTRY 370-1FFF 1
+CONST 36E-1FFF 1
+ENTRY 36E-1FFF 1
 IDLOC 2000-2003 2
-CODE 370-1FFF 1
-STRCODE 370-1FFF 1
-STRING 370-1FFF 1
+CODE 36E-1FFF 1
+STRCODE 36E-1FFF 1
+STRING 36E-1FFF 1
 # %LINETAB Section
 # This section enumerates the file/line to address mappings.
 # The beginning of the section is indicated by %LINETAB.
@@ -236,47 +236,46 @@ F resVect code >133:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograM
 191 code CODE >350:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
 192 code CODE >352:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
 193 code CODE >353:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-194 code CODE >355:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-195 code CODE >357:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-195 code CODE >358:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-196 code CODE >359:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-197 code CODE >361:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-198 code CODE >362:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-199 code CODE >364:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-19A code CODE >365:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-19B code CODE >367:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-19C code CODE >368:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-19C code CODE >369:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-19D code CODE >370:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-19E code CODE >371:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-19F code CODE >372:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A0 code CODE >374:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A1 code CODE >375:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A2 code CODE >377:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A3 code CODE >378:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A3 code CODE >379:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A4 code CODE >380:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A5 code CODE >381:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A6 code CODE >382:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A7 code CODE >384:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A8 code CODE >385:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1A9 code CODE >387:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1AA code CODE >388:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1AA code CODE >389:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1AB code CODE >390:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1AC code CODE >391:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1AD code CODE >392:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1AE code CODE >394:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1AF code CODE >395:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1B0 code CODE >397:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1B1 code CODE >399:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1B1 code CODE >400:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1B2 code CODE >401:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1B3 code CODE >402:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1B4 code CODE >403:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1B5 code CODE >405:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1B6 code CODE >406:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
-1B7 code CODE >408:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+194 code CODE >357:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+194 code CODE >358:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+195 code CODE >359:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+196 code CODE >361:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+197 code CODE >362:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+198 code CODE >364:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+199 code CODE >365:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+19A code CODE >367:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+19B code CODE >368:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+19B code CODE >369:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+19C code CODE >370:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+19D code CODE >371:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+19E code CODE >372:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+19F code CODE >374:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A0 code CODE >375:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A1 code CODE >377:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A2 code CODE >378:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A2 code CODE >379:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A3 code CODE >380:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A4 code CODE >381:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A5 code CODE >382:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A6 code CODE >384:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A7 code CODE >385:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A8 code CODE >387:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A9 code CODE >388:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1A9 code CODE >389:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1AA code CODE >390:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1AB code CODE >391:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1AC code CODE >392:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1AD code CODE >394:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1AE code CODE >395:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1AF code CODE >397:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1B0 code CODE >399:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1B0 code CODE >400:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1B1 code CODE >401:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1B2 code CODE >402:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1B3 code CODE >403:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1B4 code CODE >405:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1B5 code CODE >406:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
+1B6 code CODE >408:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograMicros_Ciclo2021\Lab_05\Lab_05.X\Lab_05.s
 # %SYMTAB Section
 # An enumeration of all symbols in the program.
 # The beginning of the section is indicated by %SYMTAB.
@@ -289,7 +288,7 @@ F resVect code >133:D:\UVG\Ciclo_1__2021\Progra_Micros\Fredy_Godoy_19260_PrograM
 # was defined in a psect then <psect> will be "-". File-name
 # is the name of the object file in which the symbol was defined.
 %SYMTAB
-__Hspace_0 1B8 0 ABS 0 - -
+__Hspace_0 1B7 0 ABS 0 - -
 __Hspace_1 80 0 ABS 0 - -
 __Hspace_3 0 0 ABS 0 - -
 __Hspace_4 4010 0 ABS 0 - -

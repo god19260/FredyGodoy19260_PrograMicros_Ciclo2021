@@ -2801,7 +2801,7 @@ Display7seg:
     btfsc Cont_Displays, 4 ; Debe encender el display 1
     goto Encender_Dis1
 
-    goto loop
+    ;goto loop
 
 Encender_Dis1:
     movf Display1,0
