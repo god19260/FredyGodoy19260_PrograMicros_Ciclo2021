@@ -108,6 +108,11 @@ main:
     bsf      OPTION_REG, 1
     bsf      OPTION_REG, 2
     
+    banksel  INTCON
+    movlw    10101000B
+    movwf    INTCON
+
+    clrf     TME0
     movlw    246       ; n de timer0
     movwf    TMR0
     ;------- Puertos ---------------
