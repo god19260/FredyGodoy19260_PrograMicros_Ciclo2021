@@ -109,11 +109,13 @@ Timer1:
     btfsc   Bandera_Dis,Off
     goto    Apagar
     
-    Encender:
-    bsf     Bandera_Dis,Off
-    goto    Fin_Timer2
     Apagar:
     bcf     Bandera_Dis,Off
+    goto    Fin_Timer2
+    
+    Encender:
+    bsf     Bandera_Dis,Off
+    
     
     Fin_Timer2:
     goto    isr
@@ -199,7 +201,7 @@ main:
     bsf	    TOUTPS0 ;Postscaler 1:16
     bcf	    TMR2IF    ; Limpiar bit de interrupción por overflow (Bit de INTCON)
     Banksel TRISA   ; Acceder al Bank 1
-    movlw   220   ; Cargar valor de registro W, valor inicial del tmr2
+    movlw   230   ; Cargar valor de registro W, valor inicial del tmr2
     movwf   PR2	
     
     ;------- Puertos ---------------
@@ -224,8 +226,6 @@ main:
 ;----------- Loop Forever --------------------------------    
 loop:  
     
-    
-    
     btfss   Bandera_Dis,Off
     goto    fin_loop
     
@@ -249,7 +249,6 @@ Display_1Y2:
     call    Display
     movwf   Display2
     
-    return
     return
 Display7seg:
     call    Display_1Y2
