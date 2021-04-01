@@ -37,7 +37,7 @@ PSECT udata_shr  ; common memory
     Display1:       DS 1
     Display2:       DS 1
     Bandera_Dis:    DS 1
-    #define Off         0
+    #define Off        0
 ;---------------------------------------------------------
 ;------------ Reset Vector -------------------------------
 PSECT resVect, class=code, abs, delta=2  
@@ -86,8 +86,10 @@ Timer0:
     movwf    TMR0
     bcf      T0IF
     goto     isr 
+    
 Timer1:
     incf    PORTC,1
+   
     Banksel PORTA   ; Acceder al Bank 0
     movlw   0x0B   ; Cargar valor de registro W, valor inicial del tmr0
     movwf   TMR1H    ; Mover el valor de W a TMR0 por interrupción
@@ -238,6 +240,8 @@ loop:
     
     fin_loop:
     goto     loop
+    
+    
 Display_1Y2:
     movf    PORTC,0
     andlw   0x0f
